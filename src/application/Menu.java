@@ -1,13 +1,10 @@
 package application;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
