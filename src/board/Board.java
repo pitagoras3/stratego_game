@@ -1,11 +1,11 @@
 package board;
 
-import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Board extends Application{
+public class Board extends Scene{
 
     public static final int BOARD_WIDTH = 700;
     public static final int BOARD_HEIGHT = 700;
@@ -17,13 +17,13 @@ public class Board extends Application{
     public static final int AMOUNT = 7;
 
     private Pane pane;
-    private Scene scene;
-    private Stage stage;
     private BoardSquare[][] board;
 
-    public static void main(String[] args){
-        launch(args);
+    public Board(Parent root) {
+        super(root);
+        initializeBoard();
     }
+
 
     public static PlayerType getWhichPlayerTurn(){
         return filledSquares % 2 == 0 ? PlayerType.RED : PlayerType.GREEN;
@@ -31,17 +31,6 @@ public class Board extends Application{
 
     public static void addMove(){
         filledSquares++;
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-        initializeBoard();
-
-        scene = new Scene(pane);
-        stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
     }
 
     private void initializeBoard(){
@@ -57,5 +46,7 @@ public class Board extends Application{
                 pane.getChildren().add(boardSquare);
             }
         }
+
+        setRoot(pane);
     }
 }
