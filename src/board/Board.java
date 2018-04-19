@@ -1,13 +1,15 @@
 package board;
 
+import application.Menu;
+import application.SceneType;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 public class Board extends Scene{
 
-    public static final int BOARD_WIDTH = 700;
+    public static final int BOARD_WIDTH = 950;
     public static final int BOARD_HEIGHT = 700;
 
     //This variable defines which player move is
@@ -19,14 +21,15 @@ public class Board extends Scene{
     private Pane pane;
     private BoardSquare[][] board;
 
+    private Button quitButton;
+
     public Board(Parent root) {
         super(root);
         initializeBoard();
     }
 
-
     public static PlayerType getWhichPlayerTurn(){
-        return filledSquares % 2 == 0 ? PlayerType.RED : PlayerType.GREEN;
+        return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
     }
 
     public static void addMove(){
@@ -46,6 +49,12 @@ public class Board extends Scene{
                 pane.getChildren().add(boardSquare);
             }
         }
+
+        quitButton = new Button("Quit");
+        quitButton.setTranslateX(800);
+        quitButton.setOnAction(event -> Menu.changeScene(SceneType.MENU));
+
+        pane.getChildren().addAll(quitButton);
 
         setRoot(pane);
     }

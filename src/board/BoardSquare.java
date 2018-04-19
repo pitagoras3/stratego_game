@@ -1,6 +1,5 @@
 package board;
 
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,7 +13,6 @@ public class BoardSquare extends StackPane {
     private PlayerType playerType;
     private Rectangle border;
     private boolean isFilled;
-
 
     public BoardSquare(int x, int y){
         this.x = x;
@@ -60,10 +58,11 @@ public class BoardSquare extends StackPane {
 
     private void onClicked(){
         if(!isFilled){
-            isFilled = true;
-            Board.addMove();
             setPlayerType(Board.getWhichPlayerTurn());
             border.setFill(playerType == PlayerType.GREEN ? Color.GREEN : Color.RED);
+
+            Board.addMove();
+            isFilled = true;
         }
     }
 }
