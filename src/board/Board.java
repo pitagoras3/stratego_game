@@ -26,7 +26,7 @@ public class Board extends Application{
     }
 
     public static PlayerType getWhichPlayerTurn(){
-        return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
+        return filledSquares % 2 == 0 ? PlayerType.RED : PlayerType.GREEN;
     }
 
     public static void addMove(){

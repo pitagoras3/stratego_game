@@ -23,7 +23,7 @@ public class BoardSquare extends StackPane {
         this.isFilled = false;
 
         border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
-        border.setStroke(Color.BLACK);
+        border.setStroke(Color.GRAY);
 
         setTranslateX(x * TILE_SIZE);
         setTranslateY(y * TILE_SIZE);
