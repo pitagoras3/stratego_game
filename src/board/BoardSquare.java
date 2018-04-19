@@ -58,10 +58,10 @@ public class BoardSquare extends StackPane {
 
     private void onClicked(){
         if(!isFilled){
-            setPlayerType(Board.getWhichPlayerTurn());
+            setPlayerType(Game.getWhichPlayerTurn());
             border.setFill(playerType == PlayerType.GREEN ? Color.GREEN : Color.RED);
 
-            Board.addMove();
+            Game.addMove();
             isFilled = true;
         }
     }

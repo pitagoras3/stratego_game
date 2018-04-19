@@ -1,13 +1,13 @@
 package board;
 
-import application.Menu;
 import application.SceneType;
+import application.StrategoApplication;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
-public class Board extends Scene{
+public class Game extends Scene {
 
     public static final int BOARD_WIDTH = 950;
     public static final int BOARD_HEIGHT = 700;
@@ -23,7 +23,7 @@ public class Board extends Scene{
 
     private Button quitButton;
 
-    public Board(Parent root) {
+    public Game(Parent root) {
         super(root);
         initializeBoard();
     }
@@ -52,7 +52,7 @@ public class Board extends Scene{
 
         quitButton = new Button("Quit");
         quitButton.setTranslateX(800);
-        quitButton.setOnAction(event -> Menu.changeScene(SceneType.MENU));
+        quitButton.setOnAction(event -> StrategoApplication.changeScene(SceneType.MENU));
 
         pane.getChildren().addAll(quitButton);
 
