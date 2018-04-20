@@ -22,7 +22,7 @@ public class BoardSquare extends StackPane {
         this.playerType = null;
         this.isFilled = false;
 
-        tileSize = Game.BOARD_HEIGHT / Game.AMOUNT;
+        tileSize = Game.BOARD_HEIGHT / Game.BOARD_SIZE;
 
         border = new Rectangle(tileSize - 2, tileSize - 2);
         border.setStroke(Color.GRAY);
@@ -33,7 +33,6 @@ public class BoardSquare extends StackPane {
         getChildren().addAll(border);
 
         setOnMouseClicked(click -> onClicked());
-
     }
 
     public int getX() {
@@ -60,6 +59,10 @@ public class BoardSquare extends StackPane {
         this.playerType = playerType;
     }
 
+    public boolean isFilled() {
+        return isFilled;
+    }
+
     private void onClicked(){
         if(!isFilled){
             setPlayerType(Game.getWhichPlayerTurn());
@@ -71,8 +74,8 @@ public class BoardSquare extends StackPane {
                 border.setFill(Color.RED);
             }
 
-            gameSquareBelongsTo.addMove(playerType, x, y);
             isFilled = true;
+            gameSquareBelongsTo.addMove(playerType, x, y);
         }
     }
 }

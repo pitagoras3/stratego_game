@@ -22,11 +22,11 @@ public class Game extends Scene {
     public static final int QUIT_BUTTON_X_POS = 800;
     public static final int QUIT_BUTTON_Y_POS = 500;
 
-    public static final int BOARD_WIDTH = 950;
+    public static final int BOARD_WIDTH = 1000;
     public static final int BOARD_HEIGHT = 700;
     public static final int INITIAL_SCORE = 0;
 
-    public static int AMOUNT = Menu.DEFAULT_BOARD_SIZE;
+    public static int BOARD_SIZE = Menu.DEFAULT_BOARD_SIZE;
 
     //This variable defines which player move is
     private static int filledSquares = 0;
@@ -49,7 +49,7 @@ public class Game extends Scene {
     public Game(Parent root, int boardSize) {
         super(root);
 
-        AMOUNT = boardSize;
+        BOARD_SIZE = boardSize;
 
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
@@ -77,16 +77,16 @@ public class Game extends Scene {
         pane = new Pane();
         pane.setPrefSize(BOARD_WIDTH, BOARD_HEIGHT);
 
-        board = new BoardSquare[AMOUNT][AMOUNT];
+        board = new BoardSquare[BOARD_SIZE][BOARD_SIZE];
 
         fillBoardWithSquares();
     }
 
     private void fillBoardWithSquares(){
-        for(int i = 0; i < AMOUNT; i++){
-            for(int j = 0; j < AMOUNT; j++){
-                BoardSquare boardSquare = new BoardSquare(i, j, this);
-                board[i][j] = boardSquare;
+        for(int y = 0; y < BOARD_SIZE; y++){
+            for(int x = 0; x < BOARD_SIZE; x++){
+                BoardSquare boardSquare = new BoardSquare(x, y, this);
+                board[y][x] = boardSquare;
                 pane.getChildren().add(boardSquare);
             }
         }
@@ -156,7 +156,7 @@ public class Game extends Scene {
     }
 
     private void checkIfGameIsFinished(){
-        if(filledSquares == AMOUNT * AMOUNT){
+        if(filledSquares == BOARD_SIZE * BOARD_SIZE){
             String result = getEndGameResult();
 
             Alert alert = new Alert(Alert.AlertType.NONE, result, ButtonType.OK);
@@ -177,11 +177,13 @@ public class Game extends Scene {
     }
 
     private void calculatePoints(PlayerType playerType, int x, int y){
+        int newPoints = PointsCounter.countPointsForPosition(x, y, board);
+
         if(playerType == PlayerType.GREEN){
-            greenPlayerScore++;
+            greenPlayerScore += newPoints;
         }
         else {
-            redPlayerScore++;
+            redPlayerScore += newPoints;
         }
     }
 }
