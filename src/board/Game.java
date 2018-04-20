@@ -9,10 +9,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class Game extends Scene {
 
     public static final String QUIT_BUTTON_TEXT = "Quit";
+    public static final String RESET_BUTTON_TEXT = "Reset";
     public static final int QUIT_BUTTON_X_POS = 800;
     public static final int QUIT_BUTTON_Y_POS = 500;
 
@@ -21,7 +23,7 @@ public class Game extends Scene {
     public static final int INITIAL_SCORE = 0;
 
     //TODO fix this fixed shit
-    public static final int AMOUNT = 100;
+    public static final int AMOUNT = 7;
 
     //This variable defines which player move is
     private static int filledSquares = 0;
@@ -49,7 +51,7 @@ public class Game extends Scene {
 
         initializeBoard();
         initializeScoreTexts();
-        initializeQuitButton();
+        initializeButtons();
 
         setRoot(pane);
     }
@@ -94,28 +96,38 @@ public class Game extends Scene {
         this.greenPlayerScoreText = new Text(String.valueOf(INITIAL_SCORE));
         this.redPlayerScoreText = new Text(String.valueOf(INITIAL_SCORE));
 
-        greenPlayerScoreText.setFont(Font.font (40));
-        redPlayerScoreText.setFont(Font.font (40));
+        greenPlayerScoreText.setFont(Font.font (60));
+        redPlayerScoreText.setFont(Font.font (60));
+
+        greenPlayerScoreText.setTextAlignment(TextAlignment.CENTER);
+        redPlayerScoreText.setTextAlignment(TextAlignment.CENTER);
 
         greenPlayerScoreText.setFill(Color.GREEN);
         redPlayerScoreText.setFill(Color.RED);
 
-        greenPlayerScoreText.setTranslateX(752);
-        greenPlayerScoreText.setTranslateY(200);
+        greenPlayerScoreText.setTranslateX(750);
+        greenPlayerScoreText.setTranslateY(300);
 
-        redPlayerScoreText.setTranslateX(867);
-        redPlayerScoreText.setTranslateY(200);
+        redPlayerScoreText.setTranslateX(865);
+        redPlayerScoreText.setTranslateY(300);
 
         pane.getChildren().addAll(greenPlayerScoreText, redPlayerScoreText);
     }
 
-    private void initializeQuitButton(){
+    private void initializeButtons(){
+        resetButton = new Button(RESET_BUTTON_TEXT);
         quitButton = new Button(QUIT_BUTTON_TEXT);
-        quitButton.setTranslateX(800);
-        quitButton.setTranslateY(500);
+
+        resetButton.setTranslateX(775);
+        resetButton.setTranslateY(350);
+        resetButton.setMinWidth(100);
+
+        quitButton.setTranslateX(775);
+        quitButton.setTranslateY(400);
+        quitButton.setMinWidth(100);
         quitButton.setOnAction(event -> StrategoApplication.changeScene(SceneType.MENU));
 
-        pane.getChildren().addAll(quitButton);
+        pane.getChildren().addAll(resetButton, quitButton);
     }
 
     private static void updateTextResults(){
