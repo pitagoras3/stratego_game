@@ -1,4 +1,4 @@
-package board;
+package game;
 
 public enum PlayerType {
     RED,

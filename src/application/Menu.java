@@ -1,6 +1,5 @@
 package application;
 
-import board.Game;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;

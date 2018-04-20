@@ -1,11 +1,13 @@
-package board;
+package game;
 
 import application.Menu;
 import application.SceneType;
 import application.StrategoApplication;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,7 +26,6 @@ public class Game extends Scene {
     public static final int BOARD_HEIGHT = 700;
     public static final int INITIAL_SCORE = 0;
 
-    //TODO fix this fixed shit
     public static int AMOUNT = Menu.DEFAULT_BOARD_SIZE;
 
     //This variable defines which player move is
@@ -64,7 +65,7 @@ public class Game extends Scene {
         return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
     }
 
-    public static void addMove(PlayerType playerType){
+    public void addMove(PlayerType playerType){
         filledSquares++;
 
         if(playerType == PlayerType.GREEN){
@@ -75,6 +76,8 @@ public class Game extends Scene {
         }
 
         updateTextResults();
+
+        checkIfGameIsFinished();
     }
 
     private void initializeBoard(){
@@ -89,7 +92,7 @@ public class Game extends Scene {
     private void fillBoardWithSquares(){
         for(int i = 0; i < AMOUNT; i++){
             for(int j = 0; j < AMOUNT; j++){
-                BoardSquare boardSquare = new BoardSquare(i, j);
+                BoardSquare boardSquare = new BoardSquare(i, j, this);
                 board[i][j] = boardSquare;
                 pane.getChildren().add(boardSquare);
             }
@@ -130,7 +133,10 @@ public class Game extends Scene {
         quitButton.setTranslateX(775);
         quitButton.setTranslateY(400);
         quitButton.setMinWidth(100);
-        quitButton.setOnAction(event -> StrategoApplication.changeScene(SceneType.MENU));
+        quitButton.setOnAction(event -> {
+            resetGame();
+            StrategoApplication.changeScene(SceneType.MENU);
+        });
 
         pane.getChildren().addAll(resetButton, quitButton);
     }
@@ -151,6 +157,29 @@ public class Game extends Scene {
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
 
+        filledSquares = 0;
+
         updateTextResults();
+    }
+
+    private void checkIfGameIsFinished(){
+        if(filledSquares == AMOUNT * AMOUNT){
+            String result = getEndGameResult();
+
+            Alert alert = new Alert(Alert.AlertType.NONE, result, ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    private String getEndGameResult(){
+        if(greenPlayerScore == redPlayerScore){
+            return "Draw!";
+        }
+        else if(greenPlayerScore > redPlayerScore){
+            return "Green player wins!";
+        }
+        else{
+            return "Red player wins!";
+        }
     }
 }
