@@ -1,5 +1,6 @@
 package board;
 
+import application.Menu;
 import application.SceneType;
 import application.StrategoApplication;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ public class Game extends Scene {
 
     public static final String QUIT_BUTTON_TEXT = "Quit";
     public static final String RESET_BUTTON_TEXT = "Reset";
+
     public static final int QUIT_BUTTON_X_POS = 800;
     public static final int QUIT_BUTTON_Y_POS = 500;
 
@@ -23,7 +25,7 @@ public class Game extends Scene {
     public static final int INITIAL_SCORE = 0;
 
     //TODO fix this fixed shit
-    public static final int AMOUNT = 7;
+    public static int AMOUNT = Menu.DEFAULT_BOARD_SIZE;
 
     //This variable defines which player move is
     private static int filledSquares = 0;
@@ -43,8 +45,10 @@ public class Game extends Scene {
     private static int greenPlayerScore;
     private static int redPlayerScore;
 
-    public Game(Parent root) {
+    public Game(Parent root, int boardSize) {
         super(root);
+
+        AMOUNT = boardSize;
 
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
@@ -121,6 +125,7 @@ public class Game extends Scene {
         resetButton.setTranslateX(775);
         resetButton.setTranslateY(350);
         resetButton.setMinWidth(100);
+        resetButton.setOnAction(event -> resetGame());
 
         quitButton.setTranslateX(775);
         quitButton.setTranslateY(400);
@@ -133,5 +138,19 @@ public class Game extends Scene {
     private static void updateTextResults(){
         greenPlayerScoreText.setText(String.valueOf(greenPlayerScore));
         redPlayerScoreText.setText(String.valueOf(redPlayerScore));
+    }
+
+    private void resetGame(){
+        //Remove all squares from board
+        pane.getChildren().removeAll(pane.getChildren().filtered(x -> x instanceof BoardSquare));
+
+        //Create new squares
+        fillBoardWithSquares();
+
+        //Reset results
+        this.greenPlayerScore = 0;
+        this.redPlayerScore = 0;
+
+        updateTextResults();
     }
 }

@@ -28,7 +28,7 @@ public class StrategoApplication extends Application{
         window = primaryStage;
         root = new VBox();
 
-        initializeScenes();
+        initializeMenuScene();
 
         changeScene(SceneType.MENU);
         window.show();
@@ -44,17 +44,16 @@ public class StrategoApplication extends Application{
         }
     }
 
-    private void initializeScenes(){
-        initializeGameScene();
-        initializeMenuScene();
+//    private void initializeScenes(){
+//        initializeGameScene();
+//        initializeMenuScene();
+//    }
+
+    public static void initializeGameScene(int boardSize){
+        gameScene = new Game(new Pane(), boardSize);
     }
 
-    private void initializeGameScene(){
-        gameScene = new Game(new Pane());
-    }
-
-    private void initializeMenuScene(){
+    private static void initializeMenuScene(){
         menuScene = new Menu(new Pane());
-//        menuScene = new Scene(root, HOME_SCENE_WIDTH, HOME_SCENE_HEIGHT);
     }
 }

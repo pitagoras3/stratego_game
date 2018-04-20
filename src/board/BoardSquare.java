@@ -6,13 +6,12 @@ import javafx.scene.shape.Rectangle;
 
 public class BoardSquare extends StackPane {
 
-    public static final int TILE_SIZE = Game.BOARD_HEIGHT / Game.AMOUNT; //100
-
     private int x;
     private int y;
     private PlayerType playerType;
     private Rectangle border;
     private boolean isFilled;
+    private int tileSize;
 
     public BoardSquare(int x, int y){
         this.x = x;
@@ -20,11 +19,13 @@ public class BoardSquare extends StackPane {
         this.playerType = null;
         this.isFilled = false;
 
-        border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
+        tileSize = Game.BOARD_HEIGHT / Game.AMOUNT;
+
+        border = new Rectangle(tileSize - 2, tileSize - 2);
         border.setStroke(Color.GRAY);
 
-        setTranslateX(x * TILE_SIZE);
-        setTranslateY(y * TILE_SIZE);
+        setTranslateX(x * tileSize);
+        setTranslateY(y * tileSize);
 
         getChildren().addAll(border);
 
