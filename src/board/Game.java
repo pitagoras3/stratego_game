@@ -21,7 +21,7 @@ public class Game extends Scene {
     public static final int INITIAL_SCORE = 0;
 
     //TODO fix this fixed shit
-    public static final int AMOUNT = 7;
+    public static final int AMOUNT = 100;
 
     //This variable defines which player move is
     private static int filledSquares = 0;

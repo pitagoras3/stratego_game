@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 public class BoardSquare extends StackPane {
 
-    public static final int TILE_SIZE = 100;
+    public static final int TILE_SIZE = Game.BOARD_HEIGHT / Game.AMOUNT; //100
 
     private int x;
     private int y;
