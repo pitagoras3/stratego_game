@@ -71,7 +71,7 @@ public class BoardSquare extends StackPane {
                 border.setFill(Color.RED);
             }
 
-            gameSquareBelongsTo.addMove(playerType);
+            gameSquareBelongsTo.addMove(playerType, x, y);
             isFilled = true;
         }
     }

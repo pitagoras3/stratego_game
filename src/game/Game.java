@@ -35,16 +35,16 @@ public class Game extends Scene {
     private BoardSquare[][] board;
 
     //Texts
-    private static Text greenPlayerScoreText;
-    private static Text redPlayerScoreText;
+    private Text greenPlayerScoreText;
+    private Text redPlayerScoreText;
 
     //Buttons
     private Button quitButton;
     private Button resetButton;
 
     //Scores
-    private static int greenPlayerScore;
-    private static int redPlayerScore;
+    private int greenPlayerScore;
+    private int redPlayerScore;
 
     public Game(Parent root, int boardSize) {
         super(root);
@@ -65,18 +65,11 @@ public class Game extends Scene {
         return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
     }
 
-    public void addMove(PlayerType playerType){
+    public void addMove(PlayerType playerType, int x, int y){
         filledSquares++;
 
-        if(playerType == PlayerType.GREEN){
-            greenPlayerScore++;
-        }
-        else {
-            redPlayerScore++;
-        }
-
+        calculatePoints(playerType, x, y);
         updateTextResults();
-
         checkIfGameIsFinished();
     }
 
@@ -141,7 +134,7 @@ public class Game extends Scene {
         pane.getChildren().addAll(resetButton, quitButton);
     }
 
-    private static void updateTextResults(){
+    private void updateTextResults(){
         greenPlayerScoreText.setText(String.valueOf(greenPlayerScore));
         redPlayerScoreText.setText(String.valueOf(redPlayerScore));
     }
@@ -180,6 +173,15 @@ public class Game extends Scene {
         }
         else{
             return "Red player wins!";
+        }
+    }
+
+    private void calculatePoints(PlayerType playerType, int x, int y){
+        if(playerType == PlayerType.GREEN){
+            greenPlayerScore++;
+        }
+        else {
+            redPlayerScore++;
         }
     }
 }
