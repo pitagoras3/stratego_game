@@ -32,8 +32,6 @@ public class PointsCounter {
         return isAnyFieldEmpty ? 0 : Game.BOARD_SIZE;
     }
 
-    //TODO if diagonal.length == 1 then fuck it
-    //TODO count length
     private static int countRightDiagonalPoints(int x, int y, BoardSquare[][] board){
         int diagonalLength = 0;
 
