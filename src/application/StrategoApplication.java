@@ -1,6 +1,7 @@
 package application;
 
 import game.Game;
+import game.GameType;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -44,13 +45,8 @@ public class StrategoApplication extends Application{
         }
     }
 
-//    private void initializeScenes(){
-//        initializeGameScene();
-//        initializeMenuScene();
-//    }
-
-    public static void initializeGameScene(int boardSize, boolean isPlayerVsPlayer){
-        gameScene = new Game(new Pane(), boardSize, isPlayerVsPlayer);
+    public static void initializeGameScene(int boardSize, GameType gameType){
+        gameScene = new Game(new Pane(), boardSize, gameType);
     }
 
     private static void initializeMenuScene(){

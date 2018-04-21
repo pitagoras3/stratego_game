@@ -51,20 +51,23 @@ public class Game extends Scene {
     private int redPlayerScore;
 
     //Game type
-    private boolean isPlayerVsPlayer;
+    private GameType gameType;
 
     //Who starts the game
     Random random;
     private boolean isAiTurn;
 
-    public Game(Parent root, int boardSize, boolean isPlayerVsPlayer) {
+    //Is game finished
+    private boolean isGameFinished;
+
+    public Game(Parent root, int boardSize, GameType gameType) {
         super(root);
 
         BOARD_SIZE = boardSize;
 
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
-        this.isPlayerVsPlayer = isPlayerVsPlayer;
+        this.gameType = gameType;
 
         initializeBoard();
         initializeScoreTexts();
@@ -72,8 +75,11 @@ public class Game extends Scene {
 
         setRoot(pane);
 
-        if (!isPlayerVsPlayer) {
+        if (gameType == GameType.PLAYER_VS_COMPUTER) {
+            //Initialize random object
             random = new Random();
+
+            //Choose first player
             randomlyChooseFirstPlayer();
         }
     }
@@ -94,10 +100,11 @@ public class Game extends Scene {
 
         calculatePoints(playerType, x, y);
         updateTextResults();
+        isGameFinished = checkIfGameIsFinished();
 
-        if (!checkIfGameIsFinished() && !isPlayerVsPlayer) {
-            //Reverse aiTurn
-            isAiTurn = isAiTurn ? false : true;
+
+        if (!isGameFinished && gameType == GameType.PLAYER_VS_COMPUTER) {
+            reverseAiTurn();
             makeMove();
         }
     }
@@ -184,12 +191,11 @@ public class Game extends Scene {
         updateTextResults();
 
         //If playing with computer, randomly choose new player
-        if(!isPlayerVsPlayer){
+        if(gameType == GameType.PLAYER_VS_COMPUTER){
             randomlyChooseFirstPlayer();
         }
     }
 
-    //TODO change that to nice looking checking
     private boolean checkIfGameIsFinished() {
         if (filledSquares == BOARD_SIZE * BOARD_SIZE) {
             String result = getEndGameResult();
@@ -227,5 +233,9 @@ public class Game extends Scene {
 
         //Make first move
         makeMove();
+    }
+
+    private void reverseAiTurn(){
+        isAiTurn = isAiTurn ? false : true;
     }
 }
