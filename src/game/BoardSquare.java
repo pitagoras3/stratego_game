@@ -63,7 +63,7 @@ public class BoardSquare extends StackPane {
         return isFilled;
     }
 
-    private void onClicked(){
+    public void onClicked(){
         if(!isFilled){
             setPlayerType(Game.getWhichPlayerTurn());
 

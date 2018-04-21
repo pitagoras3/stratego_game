@@ -49,8 +49,8 @@ public class StrategoApplication extends Application{
 //        initializeMenuScene();
 //    }
 
-    public static void initializeGameScene(int boardSize){
-        gameScene = new Game(new Pane(), boardSize);
+    public static void initializeGameScene(int boardSize, boolean isPlayerVsPlayer){
+        gameScene = new Game(new Pane(), boardSize, isPlayerVsPlayer);
     }
 
     private static void initializeMenuScene(){

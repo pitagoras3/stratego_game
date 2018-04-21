@@ -1,5 +1,7 @@
 package game;
 
+import ai.DummyAI;
+import ai.Move;
 import application.Menu;
 import application.SceneType;
 import application.StrategoApplication;
@@ -13,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+import java.util.Random;
 
 public class Game extends Scene {
 
@@ -46,34 +50,59 @@ public class Game extends Scene {
     private int greenPlayerScore;
     private int redPlayerScore;
 
-    public Game(Parent root, int boardSize) {
+    //Game type
+    private boolean isPlayerVsPlayer;
+
+    //Who starts the game
+    Random random;
+    private boolean isAiTurn;
+
+    public Game(Parent root, int boardSize, boolean isPlayerVsPlayer) {
         super(root);
 
         BOARD_SIZE = boardSize;
 
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
+        this.isPlayerVsPlayer = isPlayerVsPlayer;
 
         initializeBoard();
         initializeScoreTexts();
         initializeButtons();
 
         setRoot(pane);
+
+        if (!isPlayerVsPlayer) {
+            random = new Random();
+            randomlyChooseFirstPlayer();
+        }
     }
 
-    public static PlayerType getWhichPlayerTurn(){
+    private void makeMove() {
+        if (isAiTurn) {
+            Move aiMove = DummyAI.getDummyAiMove(board);
+            board[aiMove.getY()][aiMove.getX()].onClicked();
+        }
+    }
+
+    public static PlayerType getWhichPlayerTurn() {
         return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
     }
 
-    public void addMove(PlayerType playerType, int x, int y){
+    public void addMove(PlayerType playerType, int x, int y) {
         filledSquares++;
 
         calculatePoints(playerType, x, y);
         updateTextResults();
-        checkIfGameIsFinished();
+
+        if (!checkIfGameIsFinished() && !isPlayerVsPlayer) {
+            //Reverse aiTurn
+            isAiTurn = isAiTurn ? false : true;
+            makeMove();
+        }
     }
 
-    private void initializeBoard(){
+    private void initializeBoard() {
         pane = new Pane();
         pane.setPrefSize(BOARD_WIDTH, BOARD_HEIGHT);
 
@@ -82,9 +111,9 @@ public class Game extends Scene {
         fillBoardWithSquares();
     }
 
-    private void fillBoardWithSquares(){
-        for(int y = 0; y < BOARD_SIZE; y++){
-            for(int x = 0; x < BOARD_SIZE; x++){
+    private void fillBoardWithSquares() {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
                 BoardSquare boardSquare = new BoardSquare(x, y, this);
                 board[y][x] = boardSquare;
                 pane.getChildren().add(boardSquare);
@@ -92,12 +121,12 @@ public class Game extends Scene {
         }
     }
 
-    private void initializeScoreTexts(){
+    private void initializeScoreTexts() {
         this.greenPlayerScoreText = new Text(String.valueOf(INITIAL_SCORE));
         this.redPlayerScoreText = new Text(String.valueOf(INITIAL_SCORE));
 
-        greenPlayerScoreText.setFont(Font.font (60));
-        redPlayerScoreText.setFont(Font.font (60));
+        greenPlayerScoreText.setFont(Font.font(60));
+        redPlayerScoreText.setFont(Font.font(60));
 
         greenPlayerScoreText.setTextAlignment(TextAlignment.CENTER);
         redPlayerScoreText.setTextAlignment(TextAlignment.CENTER);
@@ -114,7 +143,7 @@ public class Game extends Scene {
         pane.getChildren().addAll(greenPlayerScoreText, redPlayerScoreText);
     }
 
-    private void initializeButtons(){
+    private void initializeButtons() {
         resetButton = new Button(RESET_BUTTON_TEXT);
         quitButton = new Button(QUIT_BUTTON_TEXT);
 
@@ -134,12 +163,12 @@ public class Game extends Scene {
         pane.getChildren().addAll(resetButton, quitButton);
     }
 
-    private void updateTextResults(){
+    private void updateTextResults() {
         greenPlayerScoreText.setText(String.valueOf(greenPlayerScore));
         redPlayerScoreText.setText(String.valueOf(redPlayerScore));
     }
 
-    private void resetGame(){
+    private void resetGame() {
         //Remove all squares from board
         pane.getChildren().removeAll(pane.getChildren().filtered(x -> x instanceof BoardSquare));
 
@@ -153,37 +182,50 @@ public class Game extends Scene {
         filledSquares = 0;
 
         updateTextResults();
+
+        //If playing with computer, randomly choose new player
+        if(!isPlayerVsPlayer){
+            randomlyChooseFirstPlayer();
+        }
     }
 
-    private void checkIfGameIsFinished(){
-        if(filledSquares == BOARD_SIZE * BOARD_SIZE){
+    //TODO change that to nice looking checking
+    private boolean checkIfGameIsFinished() {
+        if (filledSquares == BOARD_SIZE * BOARD_SIZE) {
             String result = getEndGameResult();
 
             Alert alert = new Alert(Alert.AlertType.NONE, result, ButtonType.OK);
             alert.showAndWait();
+            return true;
         }
+
+        return false;
     }
 
-    private String getEndGameResult(){
-        if(greenPlayerScore == redPlayerScore){
+    private String getEndGameResult() {
+        if (greenPlayerScore == redPlayerScore) {
             return "Draw!";
-        }
-        else if(greenPlayerScore > redPlayerScore){
+        } else if (greenPlayerScore > redPlayerScore) {
             return "Green player wins!";
-        }
-        else{
+        } else {
             return "Red player wins!";
         }
     }
 
-    private void calculatePoints(PlayerType playerType, int x, int y){
+    private void calculatePoints(PlayerType playerType, int x, int y) {
         int newPoints = PointsCounter.countPointsForPosition(x, y, board);
 
-        if(playerType == PlayerType.GREEN){
+        if (playerType == PlayerType.GREEN) {
             greenPlayerScore += newPoints;
-        }
-        else {
+        } else {
             redPlayerScore += newPoints;
         }
+    }
+
+    private void randomlyChooseFirstPlayer(){
+        isAiTurn = random.nextBoolean();
+
+        //Make first move
+        makeMove();
     }
 }

@@ -82,7 +82,7 @@ public class Menu extends Scene {
         //TODO set person vs person
         personVsPersonButton.setOnAction(event -> {
                     //Create new scene (with proper size
-                    StrategoApplication.initializeGameScene(boardSize);
+                    StrategoApplication.initializeGameScene(boardSize, true);
                     StrategoApplication.changeScene(SceneType.GAME);
                 }
         );
@@ -90,7 +90,7 @@ public class Menu extends Scene {
         //TODO set person vs computer
         personVsComputerButton.setOnAction(event -> {
                     //Create new scene (with proper size
-                    StrategoApplication.initializeGameScene(boardSize);
+                    StrategoApplication.initializeGameScene(boardSize, false);
                     StrategoApplication.changeScene(SceneType.GAME);
                 }
         );
