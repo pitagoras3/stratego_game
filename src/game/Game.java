@@ -14,15 +14,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.Random;
-
 public abstract class Game extends Scene {
 
     public static final String QUIT_BUTTON_TEXT = "Quit";
     public static final String RESET_BUTTON_TEXT = "Reset";
+    public static final String START_BUTTON_TEXT = "Start";
 
     public static final int QUIT_BUTTON_X_POS = 800;
     public static final int QUIT_BUTTON_Y_POS = 500;
+    public static final int RIGHT_PANE_CETER_X = 800;
 
     public static final int BOARD_WIDTH = 1000;
     public static final int BOARD_HEIGHT = 700;
@@ -30,25 +30,25 @@ public abstract class Game extends Scene {
 
     public static int BOARD_SIZE = Menu.DEFAULT_BOARD_SIZE;
 
-    //This variable defines which player move is
+    // This variable defines which player move is
     private static int filledSquares = 0;
 
-    private Pane pane;
+    protected Pane pane;
     protected BoardSquare[][] board;
 
-    //Texts
+    // Texts
     private Text greenPlayerScoreText;
     private Text redPlayerScoreText;
 
-    //Buttons
+    // Buttons
     private Button quitButton;
     private Button resetButton;
 
-    //Scores
+    // Scores
     private int greenPlayerScore;
     private int redPlayerScore;
 
-    //Is game finished
+    // Is game finished
     protected boolean isGameFinished;
 
     public Game(Parent root, int boardSize) {
@@ -59,6 +59,8 @@ public abstract class Game extends Scene {
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
 
+        pane = new Pane();
+        pane.setPrefSize(BOARD_WIDTH, BOARD_HEIGHT);
         initializeBoard();
         initializeScoreTexts();
         initializeButtons();
@@ -81,10 +83,32 @@ public abstract class Game extends Scene {
 
     }
 
-    private void initializeBoard() {
-        pane = new Pane();
-        pane.setPrefSize(BOARD_WIDTH, BOARD_HEIGHT);
+    protected void resetGame() {
+        makeAllValuesDefault();
+        updateTextResults();
+    }
 
+    protected void initializeButtons() {
+        resetButton = new Button(RESET_BUTTON_TEXT);
+        quitButton = new Button(QUIT_BUTTON_TEXT);
+
+        resetButton.setTranslateX(RIGHT_PANE_CETER_X);
+        resetButton.setTranslateY(550);
+        resetButton.setMinWidth(100);
+        resetButton.setOnAction(event -> resetGame());
+
+        quitButton.setTranslateX(RIGHT_PANE_CETER_X);
+        quitButton.setTranslateY(600);
+        quitButton.setMinWidth(100);
+        quitButton.setOnAction(event -> {
+            makeAllValuesDefault();
+            StrategoApplication.changeScene(SceneType.MENU);
+        });
+
+        pane.getChildren().addAll(resetButton, quitButton);
+    }
+
+    private void initializeBoard() {
         board = new BoardSquare[BOARD_SIZE][BOARD_SIZE];
 
         fillBoardWithSquares();
@@ -113,44 +137,18 @@ public abstract class Game extends Scene {
         greenPlayerScoreText.setFill(Color.GREEN);
         redPlayerScoreText.setFill(Color.RED);
 
-        greenPlayerScoreText.setTranslateX(750);
-        greenPlayerScoreText.setTranslateY(300);
+        greenPlayerScoreText.setTranslateX(RIGHT_PANE_CETER_X - 50);
+        greenPlayerScoreText.setTranslateY(100);
 
-        redPlayerScoreText.setTranslateX(865);
-        redPlayerScoreText.setTranslateY(300);
+        redPlayerScoreText.setTranslateX(RIGHT_PANE_CETER_X + 85);
+        redPlayerScoreText.setTranslateY(100);
 
         pane.getChildren().addAll(greenPlayerScoreText, redPlayerScoreText);
-    }
-
-    private void initializeButtons() {
-        resetButton = new Button(RESET_BUTTON_TEXT);
-        quitButton = new Button(QUIT_BUTTON_TEXT);
-
-        resetButton.setTranslateX(775);
-        resetButton.setTranslateY(350);
-        resetButton.setMinWidth(100);
-        resetButton.setOnAction(event -> resetGame());
-
-        quitButton.setTranslateX(775);
-        quitButton.setTranslateY(400);
-        quitButton.setMinWidth(100);
-        quitButton.setOnAction(event -> {
-            makeAllValuesDefault();
-            StrategoApplication.changeScene(SceneType.MENU);
-        });
-
-        pane.getChildren().addAll(resetButton, quitButton);
     }
 
     private void updateTextResults() {
         greenPlayerScoreText.setText(String.valueOf(greenPlayerScore));
         redPlayerScoreText.setText(String.valueOf(redPlayerScore));
-    }
-
-    protected void resetGame() {
-        makeAllValuesDefault();
-
-        updateTextResults();
     }
 
     private void makeAllValuesDefault(){

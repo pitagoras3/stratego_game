@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 
 public class StrategoApplication extends Application{
 
-    //Window
+    // Window
     private static Stage window;
 
-    //Scenes
+    // Scenes
     public static Scene menuScene;
     public static Scene gameScene;
 
