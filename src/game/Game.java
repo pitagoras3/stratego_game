@@ -1,7 +1,5 @@
 package game;
 
-import ai.DummyAI;
-import ai.Move;
 import application.Menu;
 import application.SceneType;
 import application.StrategoApplication;
@@ -18,7 +16,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.Random;
 
-public class Game extends Scene {
+public abstract class Game extends Scene {
 
     public static final String QUIT_BUTTON_TEXT = "Quit";
     public static final String RESET_BUTTON_TEXT = "Reset";
@@ -36,7 +34,7 @@ public class Game extends Scene {
     private static int filledSquares = 0;
 
     private Pane pane;
-    private BoardSquare[][] board;
+    protected BoardSquare[][] board;
 
     //Texts
     private Text greenPlayerScoreText;
@@ -50,46 +48,25 @@ public class Game extends Scene {
     private int greenPlayerScore;
     private int redPlayerScore;
 
-    //Game type
-    private GameType gameType;
-
-    //Who starts the game
-    Random random;
-    private boolean isAiTurn;
-
     //Is game finished
-    private boolean isGameFinished;
+    protected boolean isGameFinished;
 
-    public Game(Parent root, int boardSize, GameType gameType) {
+    public Game(Parent root, int boardSize) {
         super(root);
 
         BOARD_SIZE = boardSize;
 
         this.greenPlayerScore = 0;
         this.redPlayerScore = 0;
-        this.gameType = gameType;
 
         initializeBoard();
         initializeScoreTexts();
         initializeButtons();
 
         setRoot(pane);
-
-        if (gameType == GameType.PLAYER_VS_COMPUTER) {
-            //Initialize random object
-            random = new Random();
-
-            //Choose first player
-            randomlyChooseFirstPlayer();
-        }
     }
 
-    private void makeMove() {
-        if (isAiTurn) {
-            Move aiMove = DummyAI.getDummyAiMove(board);
-            board[aiMove.getY()][aiMove.getX()].onClicked();
-        }
-    }
+    abstract void makeMove();
 
     public static PlayerType getWhichPlayerTurn() {
         return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
@@ -102,11 +79,6 @@ public class Game extends Scene {
         updateTextResults();
         isGameFinished = checkIfGameIsFinished();
 
-
-        if (!isGameFinished && gameType == GameType.PLAYER_VS_COMPUTER) {
-            reverseAiTurn();
-            makeMove();
-        }
     }
 
     private void initializeBoard() {
@@ -163,7 +135,7 @@ public class Game extends Scene {
         quitButton.setTranslateY(400);
         quitButton.setMinWidth(100);
         quitButton.setOnAction(event -> {
-            resetGame();
+            makeAllValuesDefault();
             StrategoApplication.changeScene(SceneType.MENU);
         });
 
@@ -175,7 +147,13 @@ public class Game extends Scene {
         redPlayerScoreText.setText(String.valueOf(redPlayerScore));
     }
 
-    private void resetGame() {
+    protected void resetGame() {
+        makeAllValuesDefault();
+
+        updateTextResults();
+    }
+
+    private void makeAllValuesDefault(){
         //Remove all squares from board
         pane.getChildren().removeAll(pane.getChildren().filtered(x -> x instanceof BoardSquare));
 
@@ -187,13 +165,6 @@ public class Game extends Scene {
         this.redPlayerScore = 0;
 
         filledSquares = 0;
-
-        updateTextResults();
-
-        //If playing with computer, randomly choose new player
-        if(gameType == GameType.PLAYER_VS_COMPUTER){
-            randomlyChooseFirstPlayer();
-        }
     }
 
     private boolean checkIfGameIsFinished() {
@@ -228,14 +199,4 @@ public class Game extends Scene {
         }
     }
 
-    private void randomlyChooseFirstPlayer(){
-        isAiTurn = random.nextBoolean();
-
-        //Make first move
-        makeMove();
-    }
-
-    private void reverseAiTurn(){
-        isAiTurn = isAiTurn ? false : true;
-    }
 }

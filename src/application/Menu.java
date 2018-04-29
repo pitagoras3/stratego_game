@@ -1,5 +1,6 @@
 package application;
 
+import game.GameType;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -79,18 +80,16 @@ public class Menu extends Scene {
 
     private void setMenuButtonsActions() {
 
-        //TODO set person vs person
         personVsPersonButton.setOnAction(event -> {
                     //Create new scene (with proper size
-                    StrategoApplication.initializeGameScene(boardSize, true);
+                    StrategoApplication.initializeGameScene(boardSize, GameType.PLAYER_VS_PLAYER);
                     StrategoApplication.changeScene(SceneType.GAME);
                 }
         );
 
-        //TODO set person vs computer
         personVsComputerButton.setOnAction(event -> {
                     //Create new scene (with proper size
-                    StrategoApplication.initializeGameScene(boardSize, false);
+                    StrategoApplication.initializeGameScene(boardSize, GameType.PLAYER_VS_COMPUTER);
                     StrategoApplication.changeScene(SceneType.GAME);
                 }
         );

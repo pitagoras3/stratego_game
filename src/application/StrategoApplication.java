@@ -1,11 +1,9 @@
 package application;
 
-import game.Game;
-import game.GameType;
+import game.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class StrategoApplication extends Application{
@@ -17,9 +15,6 @@ public class StrategoApplication extends Application{
     public static Scene menuScene;
     public static Scene gameScene;
 
-    //Root
-    private VBox root;
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,8 +22,6 @@ public class StrategoApplication extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        root = new VBox();
-
         initializeMenuScene();
 
         changeScene(SceneType.MENU);
@@ -45,8 +38,18 @@ public class StrategoApplication extends Application{
         }
     }
 
+    //TODO use state pattern instead of this ifs
     public static void initializeGameScene(int boardSize, GameType gameType){
-        gameScene = new Game(new Pane(), boardSize, gameType);
+
+        if(gameType == GameType.PLAYER_VS_PLAYER){
+            gameScene = new PlayerVsPlayerGame(new Pane(), boardSize);
+        }
+        else if(gameType == GameType.PLAYER_VS_COMPUTER){
+            gameScene = new PlayerVsComputerGame(new Pane(), boardSize);
+        }
+        else if(gameType == GameType.COPMUTER_VS_COMPUTER){
+            gameScene = new ComputerVsComputerGame(new Pane(), boardSize);
+        }
     }
 
     private static void initializeMenuScene(){
