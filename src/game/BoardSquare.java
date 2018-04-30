@@ -25,7 +25,8 @@ public class BoardSquare extends StackPane {
         tileSize = Game.BOARD_HEIGHT / Game.BOARD_SIZE;
 
         border = new Rectangle(tileSize - 2, tileSize - 2);
-        border.setStroke(Color.GRAY);
+        border.setFill(Color.GRAY);
+        border.setStroke(Color.WHITE);
 
         setTranslateX(x * tileSize);
         setTranslateY(y * tileSize);
@@ -33,6 +34,10 @@ public class BoardSquare extends StackPane {
         getChildren().addAll(border);
 
         setOnMouseClicked(click -> onClicked());
+    }
+
+    public Rectangle getMyBorder() {
+        return border;
     }
 
     public int getX() {

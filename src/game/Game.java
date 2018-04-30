@@ -112,6 +112,7 @@ public abstract class Game extends Scene {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 board[y][x].setDisable(!availability);
+                board[y][x].getMyBorder().setFill(availability ? Color.GRAY : Color.rgb(24, 67, 135));
             }
         }
     }
