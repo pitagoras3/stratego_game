@@ -56,6 +56,10 @@ public class BoardSquare extends StackPane {
         this.y = y;
     }
 
+    public void setFilled(boolean filled) {
+        isFilled = filled;
+    }
+
     public PlayerType getPlayerType() {
         return playerType;
     }

@@ -79,12 +79,12 @@ public class ComputerVsComputerGame extends Game{
         }
         if (isGreenPlayerTurn) {
             // Set green player parameters
-            Move greenPlayerMove = DummyAI.getDummyAiMove(super.board);
+            Move greenPlayerMove = DummyAI.getNextMove(super.board);
             board[greenPlayerMove.getY()][greenPlayerMove.getX()].onClicked();
         }
         else {
             // Set red player parameters
-            Move redPlayerMove = DummyAI.getDummyAiMove(super.board);
+            Move redPlayerMove = DummyAI.getNextMove(super.board);
             board[redPlayerMove.getY()][redPlayerMove.getX()].onClicked();
         }
     }

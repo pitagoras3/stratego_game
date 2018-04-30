@@ -1,6 +1,7 @@
 package game;
 
 import ai.DummyAI;
+import ai.MinMaxAI;
 import ai.Move;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
@@ -50,7 +51,8 @@ public class PlayerVsComputerGame extends Game {
             return;
         }
         if (isAiTurn) {
-            Move aiMove = DummyAI.getDummyAiMove(super.board);
+//            Move aiMove = DummyAI.getNextMove(super.board);
+            Move aiMove = MinMaxAI.getNextMove(3, this, getWhichPlayerTurn());
             board[aiMove.getY()][aiMove.getX()].onClicked();
         }
     }
@@ -105,6 +107,9 @@ public class PlayerVsComputerGame extends Game {
     @Override
     protected void resetGame() {
         super.resetGame();
+
+        MinMaxAI.resetMinMax();
+
         isGameStarted = false;
         setAllSquaresAvailability(false);
         startButton.setDisable(false);

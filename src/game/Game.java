@@ -70,6 +70,14 @@ public abstract class Game extends Scene {
 
     abstract void makeMove();
 
+    public void setGreenPlayerScore(int greenPlayerScore) {
+        this.greenPlayerScore = greenPlayerScore;
+    }
+
+    public void setRedPlayerScore(int redPlayerScore) {
+        this.redPlayerScore = redPlayerScore;
+    }
+
     public static PlayerType getWhichPlayerTurn() {
         return filledSquares % 2 == 0 ? PlayerType.GREEN : PlayerType.RED;
     }
@@ -81,6 +89,22 @@ public abstract class Game extends Scene {
         updateTextResults();
         isGameFinished = checkIfGameIsFinished();
 
+    }
+
+    public int getGreenPlayerScore(){
+        return greenPlayerScore;
+    }
+
+    public BoardSquare[][] getBoard() {
+        return board;
+    }
+
+    public int getRedPlayerScore(){
+        return redPlayerScore;
+    }
+
+    public static int getFilledSquares() {
+        return filledSquares;
     }
 
     protected void resetGame() {
@@ -196,7 +220,7 @@ public abstract class Game extends Scene {
         }
     }
 
-    private void calculatePoints(PlayerType playerType, int x, int y) {
+    public void calculatePoints(PlayerType playerType, int x, int y) {
         int newPoints = PointsCounter.countPointsForPosition(x, y, board);
 
         if (playerType == PlayerType.GREEN) {

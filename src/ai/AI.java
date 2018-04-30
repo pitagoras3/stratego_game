@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public interface AI {
 
-    public Move getNextMove(BoardSquare[][] board);
+//    static Move getNextMove(BoardSquare[][] board){
+//        return new Move(0, 0);
+//    }
 
-    default ArrayList<Move> getPossibleMoves(BoardSquare[][] board){
+    static ArrayList<Move> getPossibleMoves(BoardSquare[][] board){
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         for(int y = 0; y < Game.BOARD_SIZE; y++){
