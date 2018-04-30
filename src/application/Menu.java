@@ -25,6 +25,7 @@ public class Menu extends Scene {
     private static final String GAME_TITLE = "Stratego";
     private static final String PERSON_VS_PERSON = "Person vs Person";
     private static final String PERSON_VS_COMPUTER = "Person vs Computer";
+    private static final String COMPUTER_VS_COMPUTER = "Computer vs Computer";
 
     //Text
     private Text gameTitleText;
@@ -33,6 +34,7 @@ public class Menu extends Scene {
     //Buttons
     private Button personVsPersonButton;
     private Button personVsComputerButton;
+    private Button computerVsComputerButton;
 
     //Slider
     private Slider boardSizeSlider;
@@ -61,7 +63,13 @@ public class Menu extends Scene {
 
         initializeBoardSizeSlider();
 
-        pane.getChildren().addAll(gameTitleText, personVsPersonButton, personVsComputerButton, boardSizeSlider, boardSizeText);
+        pane.getChildren().addAll(gameTitleText,
+                personVsPersonButton,
+                personVsComputerButton,
+                computerVsComputerButton,
+                boardSizeSlider,
+                boardSizeText
+        );
         setRoot(pane);
     }
 
@@ -76,6 +84,11 @@ public class Menu extends Scene {
     private void initializeMenuButtons() {
         personVsPersonButton = new Button(PERSON_VS_PERSON);
         personVsComputerButton = new Button(PERSON_VS_COMPUTER);
+        computerVsComputerButton = new Button(COMPUTER_VS_COMPUTER);
+
+        personVsPersonButton.setMinWidth(170);
+        personVsComputerButton.setMinWidth(170);
+        computerVsComputerButton.setMinWidth(170);
     }
 
     private void setMenuButtonsActions() {
@@ -93,6 +106,12 @@ public class Menu extends Scene {
                     StrategoApplication.changeScene(SceneType.GAME);
                 }
         );
+
+        computerVsComputerButton.setOnAction(event -> {
+            StrategoApplication.initializeGameScene(boardSize, GameType.COMPUTER_VS_COMPUTER);
+            StrategoApplication.changeScene(SceneType.GAME);
+        });
+
     }
 
     private void translateMenuButtons() {

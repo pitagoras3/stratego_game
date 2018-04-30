@@ -47,7 +47,7 @@ public class StrategoApplication extends Application{
         else if(gameType == GameType.PLAYER_VS_COMPUTER){
             gameScene = new PlayerVsComputerGame(new Pane(), boardSize);
         }
-        else if(gameType == GameType.COPMUTER_VS_COMPUTER){
+        else if(gameType == GameType.COMPUTER_VS_COMPUTER){
             gameScene = new ComputerVsComputerGame(new Pane(), boardSize);
         }
     }
