@@ -30,18 +30,25 @@ public class PlayerVsComputerGame extends Game {
     private Separator topSeparator;
     private Separator bottomSeparator;
 
+    private boolean isGameStarted;
+
     public PlayerVsComputerGame(Parent root, int boardSize) {
         super(root, boardSize);
         this.treeDepth = DEFAULT_TREE_DEPTH;
+        this.isGameStarted = false;
 
         initializeSlider();
         initializeSeparators();
         chooseStartingPlayer();
-        makeMove();
+
+        setAllSquaresAvailability(false);
     }
 
     @Override
     void makeMove() {
+        if(!isGameStarted){
+            return;
+        }
         if (isAiTurn) {
             Move aiMove = DummyAI.getDummyAiMove(super.board);
             board[aiMove.getY()][aiMove.getX()].onClicked();
@@ -98,8 +105,10 @@ public class PlayerVsComputerGame extends Game {
     @Override
     protected void resetGame() {
         super.resetGame();
+        isGameStarted = false;
+        setAllSquaresAvailability(false);
+        startButton.setDisable(false);
         chooseStartingPlayer();
-        makeMove();
     }
 
     private void chooseStartingPlayer() {
@@ -119,12 +128,10 @@ public class PlayerVsComputerGame extends Game {
     }
 
     private void startGame(){
-        //isGameStarted = true;
+        isGameStarted = true;
+        setAllSquaresAvailability(true);
         startButton.setDisable(true);
-        //super.resetButton.setDisable(false);
-
-        //initializeBoard();
-        //setRoot(pane);
+        makeMove();
     }
 
     private void initializeSeparators(){

@@ -74,7 +74,7 @@ public class ComputerVsComputerGame extends Game{
 
     @Override
     void makeMove() {
-        if(isGameStarted){
+        if(!isGameStarted){
             return;
         }
         if (isGreenPlayerTurn) {
@@ -187,28 +187,17 @@ public class ComputerVsComputerGame extends Game{
     @Override
     protected void resetGame() {
         super.resetGame();
-//        chooseStartingPlayer();
+        isGameStarted = false;
         setAllSquaresAvailability(false);
         startButton.setDisable(false);
     }
-
-//    private void chooseStartingPlayer() {
-//        String chooseStartingPlayer = "Choose starting player.";
-//
-//        ButtonType playerButtonType = new ButtonType("Player");
-//        ButtonType computerButtonType = new ButtonType("Computer");
-//
-//        Alert alert = new Alert(Alert.AlertType.NONE, chooseStartingPlayer, playerButtonType, computerButtonType);
-//        alert.showAndWait();
-//
-//        isAiTurn = alert.getResult() == computerButtonType;
-//    }
 
     private void reversePlayerTurn() {
         isGreenPlayerTurn = !isGreenPlayerTurn;
     }
 
     private void startGame(){
+        isGameStarted = true;
         setAllSquaresAvailability(true);
         startButton.setDisable(true);
         makeMove();
@@ -234,14 +223,6 @@ public class ComputerVsComputerGame extends Game{
         bottomSeparator.setTranslateY(BOTTOM_SEPARATOR_Y);
 
         super.pane.getChildren().addAll(topSeparator, middleSeparator, bottomSeparator);
-    }
-
-    private void setAllSquaresAvailability(boolean availability) {
-        for (int y = 0; y < BOARD_SIZE; y++) {
-            for (int x = 0; x < BOARD_SIZE; x++) {
-                board[y][x].setDisable(!availability);
-            }
-        }
     }
 
 }

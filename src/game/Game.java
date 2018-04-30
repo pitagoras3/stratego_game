@@ -108,6 +108,14 @@ public abstract class Game extends Scene {
         pane.getChildren().addAll(resetButton, quitButton);
     }
 
+    protected void setAllSquaresAvailability(boolean availability) {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                board[y][x].setDisable(!availability);
+            }
+        }
+    }
+
     private void initializeBoard() {
         board = new BoardSquare[BOARD_SIZE][BOARD_SIZE];
 
