@@ -27,7 +27,8 @@ public class MinMaxAI implements AI{
 
     private static Move getMinMaxMove(int treeDepth){
         ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
-        minimax(availableMoves, treeDepth, true);
+//        minimax(availableMoves, treeDepth, true);
+        alphaBetaPruning(availableMoves, treeDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         return globalBestMove;
     }
 
@@ -111,6 +112,104 @@ public class MinMaxAI implements AI{
                 if(value < bestValue){
                     bestValue = value;
                     localBestMove = currentMove;
+                }
+            }
+
+            return bestValue;
+        }
+    }
+
+    private static int alphaBetaPruning(ArrayList<Move> availableMoves, int depth, int alpha, int beta, boolean isMaximizer){
+
+        if (depth == 0 || availableMoves.size() == 0){
+            if(currentPlayerType == PlayerType.GREEN){
+                return currentGame.getGreenPlayerScore() - currentGame.getRedPlayerScore();
+            }
+            else {
+                return currentGame.getRedPlayerScore() - currentGame.getGreenPlayerScore();
+            }
+        }
+
+        if(isMaximizer){
+            int bestValue = Integer.MIN_VALUE;
+
+            for(int i = 0; i < availableMoves.size(); i++){
+                Move currentMove = availableMoves.get(i);
+
+                int initialGreenPlayerScore = currentGame.getGreenPlayerScore();
+                int initialRedPlayerScore = currentGame.getRedPlayerScore();
+
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(true);
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(currentPlayerType);
+                currentGame.calculatePoints(currentPlayerType, currentMove.getX(), currentMove.getY());
+                availableMoves.remove(i);
+
+                int value = alphaBetaPruning(availableMoves, depth - 1, alpha, beta, false);
+
+                //Get back removed move
+                availableMoves.add(i, currentMove);
+
+                currentGame.setGreenPlayerScore(initialGreenPlayerScore);
+                currentGame.setRedPlayerScore(initialRedPlayerScore);
+
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(false);
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(null);
+
+
+                if(value > bestValue){
+                    bestValue = value;
+                    localBestMove = currentMove;
+
+                    //Save best state
+                    if(MinMaxAI.globalTreeDepth == depth){
+                        globalBestMove = currentMove;
+                    }
+                }
+
+                // Beta cutting
+                alpha = Math.max(alpha, bestValue);
+                if(beta <= alpha){
+                    break;
+                }
+            }
+
+            return bestValue;
+        }
+
+        else { //Minimizer
+            int bestValue = Integer.MAX_VALUE;
+
+            for(int i = 0; i < availableMoves.size(); i++){
+                Move currentMove = availableMoves.get(i);
+
+                int initialGreenPlayerScore = currentGame.getGreenPlayerScore();
+                int initialRedPlayerScore = currentGame.getRedPlayerScore();
+
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(true);
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(oppositePlayerType);
+                currentGame.calculatePoints(oppositePlayerType, currentMove.getX(), currentMove.getY());
+
+                availableMoves.remove(i);
+                int value = alphaBetaPruning(availableMoves, depth - 1, alpha, beta, true);
+
+                //Get back removed move
+                availableMoves.add(i, currentMove);
+
+                currentGame.setGreenPlayerScore(initialGreenPlayerScore);
+                currentGame.setRedPlayerScore(initialRedPlayerScore);
+
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(false);
+                currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(null);
+
+                if(value < bestValue){
+                    bestValue = value;
+                    localBestMove = currentMove;
+                }
+
+                // Alpha cutting
+                beta = Math.min(beta, bestValue);
+                if (beta <= alpha){
+                   break;
                 }
             }
 
