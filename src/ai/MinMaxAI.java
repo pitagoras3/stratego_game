@@ -19,7 +19,10 @@ public class MinMaxAI implements AI{
         MinMaxAI.currentPlayerType = currentPlayerType;
         MinMaxAI.oppositePlayerType = currentPlayerType == PlayerType.GREEN ? PlayerType.RED : PlayerType.GREEN;
         MinMaxAI.globalTreeDepth = treeDepth;
-        return getMinMaxMove(treeDepth);
+        Move bestMove = getMinMaxMove(treeDepth);
+        resetMinMax();
+
+        return bestMove;
     }
 
     private static Move getMinMaxMove(int treeDepth){
@@ -120,6 +123,8 @@ public class MinMaxAI implements AI{
         MinMaxAI.currentPlayerType = null;
         MinMaxAI.oppositePlayerType = null;
         MinMaxAI.localBestMove = null;
+        MinMaxAI.globalTreeDepth = 0;
+        MinMaxAI.globalBestMove = null;
     }
 
 }

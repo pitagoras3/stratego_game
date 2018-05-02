@@ -1,6 +1,7 @@
 package game;
 
 import ai.DummyAI;
+import ai.MinMaxAI;
 import ai.Move;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
@@ -62,6 +63,7 @@ public class ComputerVsComputerGame extends Game{
     public ComputerVsComputerGame(Parent root, int boardSize) {
         super(root, boardSize);
         this.greenPlayerTreeDepth = DEFAULT_TREE_DEPTH;
+        this.redPlayerTreeDepth = DEFAULT_TREE_DEPTH;
         this.isGreenPlayerTurn = true;
         this.isGameStarted = false;
 
@@ -79,12 +81,13 @@ public class ComputerVsComputerGame extends Game{
         }
         if (isGreenPlayerTurn) {
             // Set green player parameters
-            Move greenPlayerMove = DummyAI.getNextMove(super.board);
+            Move greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn());
             board[greenPlayerMove.getY()][greenPlayerMove.getX()].onClicked();
         }
         else {
             // Set red player parameters
-            Move redPlayerMove = DummyAI.getNextMove(super.board);
+//            Move redPlayerMove = DummyAI.getNextMove(super.board);
+            Move redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn());
             board[redPlayerMove.getY()][redPlayerMove.getX()].onClicked();
         }
     }
