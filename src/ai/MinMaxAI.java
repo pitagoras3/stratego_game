@@ -10,20 +10,22 @@ public class MinMaxAI implements AI{
     private static Game currentGame;
     private static PlayerType currentPlayerType;
     private static PlayerType oppositePlayerType;
-    private static Move bestMove;
+    private static Move localBestMove;
+    private static int globalTreeDepth;
+    private static Move globalBestMove;
 
     public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType){
         MinMaxAI.currentGame = currentGame;
         MinMaxAI.currentPlayerType = currentPlayerType;
         MinMaxAI.oppositePlayerType = currentPlayerType == PlayerType.GREEN ? PlayerType.RED : PlayerType.GREEN;
+        MinMaxAI.globalTreeDepth = treeDepth;
         return getMinMaxMove(treeDepth);
     }
 
     private static Move getMinMaxMove(int treeDepth){
         ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
         minimax(availableMoves, treeDepth, true);
-
-        return bestMove;
+        return globalBestMove;
     }
 
     private static int minimax(ArrayList<Move> availableMoves, int depth, boolean isMaximizer){
@@ -43,7 +45,6 @@ public class MinMaxAI implements AI{
             for(int i = 0; i < availableMoves.size(); i++){
                 Move currentMove = availableMoves.get(i);
 
-//                int initialFilledSquares = Game.getFilledSquares();
                 int initialGreenPlayerScore = currentGame.getGreenPlayerScore();
                 int initialRedPlayerScore = currentGame.getRedPlayerScore();
 
@@ -52,7 +53,7 @@ public class MinMaxAI implements AI{
                 currentGame.calculatePoints(currentPlayerType, currentMove.getX(), currentMove.getY());
                 availableMoves.remove(i);
 
-                int value = minimax(availableMoves, depth - 1, !isMaximizer);
+                int value = minimax(availableMoves, depth - 1, false);
 
                 //Get back removed move
                 availableMoves.add(i, currentMove);
@@ -66,9 +67,13 @@ public class MinMaxAI implements AI{
 
                 if(value > bestValue){
                     bestValue = value;
-                    bestMove = currentMove;
-                    System.out.println("[MAX] BEST VALUE: " + bestValue);
-                    System.out.println("[MAX] BEST MOVE: " + bestMove + "\n");
+                    localBestMove = currentMove;
+
+                    //Save current state
+                    if(MinMaxAI.globalTreeDepth == depth){
+                        globalBestMove = currentMove;
+                    }
+
                 }
             }
 
@@ -81,23 +86,28 @@ public class MinMaxAI implements AI{
             for(int i = 0; i < availableMoves.size(); i++){
                 Move currentMove = availableMoves.get(i);
 
+                int initialGreenPlayerScore = currentGame.getGreenPlayerScore();
+                int initialRedPlayerScore = currentGame.getRedPlayerScore();
+
                 currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(true);
                 currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(oppositePlayerType);
+                currentGame.calculatePoints(oppositePlayerType, currentMove.getX(), currentMove.getY());
 
                 availableMoves.remove(i);
-                int value = minimax(availableMoves, depth - 1, !isMaximizer);
+                int value = minimax(availableMoves, depth - 1, true);
 
                 //Get back removed move
                 availableMoves.add(i, currentMove);
+
+                currentGame.setGreenPlayerScore(initialGreenPlayerScore);
+                currentGame.setRedPlayerScore(initialRedPlayerScore);
+
                 currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setFilled(false);
                 currentGame.getBoard()[currentMove.getY()][currentMove.getX()].setPlayerType(null);
 
                 if(value < bestValue){
                     bestValue = value;
-                    bestMove = currentMove;
-
-                    System.out.println("[MIN] BEST VALUE: " + bestValue);
-                    System.out.println("[MIN] BEST MOVE: " + bestMove + "\n");
+                    localBestMove = currentMove;
                 }
             }
 
@@ -109,7 +119,7 @@ public class MinMaxAI implements AI{
         MinMaxAI.currentGame = null;
         MinMaxAI.currentPlayerType = null;
         MinMaxAI.oppositePlayerType = null;
-        MinMaxAI.bestMove = null;
+        MinMaxAI.localBestMove = null;
     }
 
 }

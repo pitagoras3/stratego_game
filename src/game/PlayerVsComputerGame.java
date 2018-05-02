@@ -51,8 +51,7 @@ public class PlayerVsComputerGame extends Game {
             return;
         }
         if (isAiTurn) {
-//            Move aiMove = DummyAI.getNextMove(super.board);
-            Move aiMove = MinMaxAI.getNextMove(3, this, getWhichPlayerTurn());
+            Move aiMove = MinMaxAI.getNextMove(treeDepth, this, getWhichPlayerTurn());
             board[aiMove.getY()][aiMove.getX()].onClicked();
         }
     }
