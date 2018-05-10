@@ -1,11 +1,12 @@
 package ai;
 
+import ai.node_heuristic.NodeHeuristic;
 import game.Game;
 import game.PlayerType;
 
 import java.util.ArrayList;
 
-public class MinMaxAI implements AI{
+public class MinMaxAI implements Heuristic {
 
     private static Game currentGame;
     private static PlayerType currentPlayerType;
@@ -13,8 +14,11 @@ public class MinMaxAI implements AI{
     private static Move localBestMove;
     private static int globalTreeDepth;
     private static Move globalBestMove;
+    private static NodeHeuristic nodeHeuristic;
 
-    public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType, boolean shouldUseAlphaBeta){
+    public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType,
+                                   boolean shouldUseAlphaBeta, NodeHeuristic nodeHeuristic){
+        MinMaxAI.nodeHeuristic = nodeHeuristic;
         MinMaxAI.currentGame = currentGame;
         MinMaxAI.currentPlayerType = currentPlayerType;
         MinMaxAI.oppositePlayerType = currentPlayerType == PlayerType.GREEN ? PlayerType.RED : PlayerType.GREEN;
@@ -26,13 +30,13 @@ public class MinMaxAI implements AI{
     }
 
     private static Move getMinMaxMove(int treeDepth){
-        ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
+        ArrayList<Move> availableMoves = nodeHeuristic.getAvailableMoves(currentGame.getBoard());
         minimax(availableMoves, treeDepth, true);
         return globalBestMove;
     }
 
     private static Move getAlphaBetaMove(int treeDepth){
-        ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
+        ArrayList<Move> availableMoves = nodeHeuristic.getAvailableMoves(currentGame.getBoard());
         alphaBetaPruning(availableMoves, treeDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         return globalBestMove;
     }

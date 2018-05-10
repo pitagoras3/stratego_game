@@ -1,8 +1,9 @@
 package game;
 
-import ai.DummyAI;
 import ai.MinMaxAI;
 import ai.Move;
+import ai.node_heuristic.NodeHeuristic;
+import ai.node_heuristic.StateInOrderNodeHeuristic;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -40,7 +41,7 @@ public class ComputerVsComputerGame extends Game{
     // Start button
     private Button startButton;
 
-    // AI tree depth sliders
+    // Heuristic tree depth sliders
     private int     greenPlayerTreeDepth;
     private Slider  greenPlayerTreeDepthSlider;
     private Text    greenPlayerTreeDepthText;
@@ -58,6 +59,10 @@ public class ComputerVsComputerGame extends Game{
     private Separator middleSeparator;
     private Separator bottomSeparator;
 
+    // Node Heuristics
+    private NodeHeuristic greenPlayerNodeHeuristic;
+    private NodeHeuristic redPlayerNodeHeuristic;
+
     private boolean isGameStarted;
 
     public ComputerVsComputerGame(Parent root, int boardSize) {
@@ -71,6 +76,8 @@ public class ComputerVsComputerGame extends Game{
         initializeSeparators();
         initializeLabels();
         initializeCheckBoxes();
+        initializeHeuristics();
+
         setAllSquaresAvailability(false);
     }
 
@@ -84,10 +91,20 @@ public class ComputerVsComputerGame extends Game{
             Move greenPlayerMove;
 
             if (greenPlayerUseAlphaBetaPruningCheckBox.isSelected()){
-                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn(), true);
+                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth,
+                        this,
+                        getWhichPlayerTurn(),
+                        true,
+                        greenPlayerNodeHeuristic
+                );
             }
             else {
-                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn(), false);
+                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth,
+                        this,
+                        getWhichPlayerTurn(),
+                        false,
+                        greenPlayerNodeHeuristic
+                );
             }
 
             board[greenPlayerMove.getY()][greenPlayerMove.getX()].onClicked();
@@ -97,10 +114,20 @@ public class ComputerVsComputerGame extends Game{
             Move redPlayerMove;
 
             if (redPlayerUseAlphaBetaPruningCheckBox.isSelected()){
-                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn(), true);
+                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth,
+                        this,
+                        getWhichPlayerTurn(),
+                        true,
+                        redPlayerNodeHeuristic
+                );
             }
             else {
-                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn(), false);
+                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth,
+                        this,
+                        getWhichPlayerTurn(),
+                        false,
+                        redPlayerNodeHeuristic
+                );
             }
 
             board[redPlayerMove.getY()][redPlayerMove.getX()].onClicked();
@@ -212,6 +239,11 @@ public class ComputerVsComputerGame extends Game{
         bottomSeparator.setTranslateY(BOTTOM_SEPARATOR_Y);
 
         super.pane.getChildren().addAll(topSeparator, middleSeparator, bottomSeparator);
+    }
+
+    private void initializeHeuristics(){
+        greenPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
+        redPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
     }
 
     @Override

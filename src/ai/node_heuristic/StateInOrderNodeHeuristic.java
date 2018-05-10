@@ -1,17 +1,15 @@
-package ai;
+package ai.node_heuristic;
 
+import ai.Move;
 import game.BoardSquare;
 import game.Game;
 
 import java.util.ArrayList;
 
-public interface AI {
+public class StateInOrderNodeHeuristic implements NodeHeuristic {
 
-//    static Move getNextMove(BoardSquare[][] board){
-//        return new Move(0, 0);
-//    }
-
-    static ArrayList<Move> getPossibleMoves(BoardSquare[][] board){
+    @Override
+    public ArrayList<Move> getAvailableMoves(BoardSquare[][] board) {
         ArrayList<Move> availableMoves = new ArrayList<>();
 
         for(int y = 0; y < Game.BOARD_SIZE; y++){
@@ -21,7 +19,7 @@ public interface AI {
                 }
             }
         }
-
         return availableMoves;
     }
+
 }

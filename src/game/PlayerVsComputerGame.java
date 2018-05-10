@@ -3,6 +3,7 @@ package game;
 import ai.DummyAI;
 import ai.MinMaxAI;
 import ai.Move;
+import ai.node_heuristic.StateInOrderNodeHeuristic;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -22,7 +23,7 @@ public class PlayerVsComputerGame extends Game {
     // Start button
     private Button startButton;
 
-    // AI tree depth slider
+    // Heuristic tree depth slider
     private int treeDepth;
     private Slider treeDepthSlider;
     private Text treeDepthText;
@@ -51,7 +52,7 @@ public class PlayerVsComputerGame extends Game {
             return;
         }
         if (isAiTurn) {
-            Move aiMove = MinMaxAI.getNextMove(treeDepth, this, getWhichPlayerTurn());
+            Move aiMove = MinMaxAI.getNextMove(treeDepth, this, getWhichPlayerTurn(), useAlphaBetaPruningCheckBox.isSelected(), new StateInOrderNodeHeuristic());
             board[aiMove.getY()][aiMove.getX()].onClicked();
         }
     }
