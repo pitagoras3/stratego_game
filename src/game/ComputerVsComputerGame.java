@@ -23,7 +23,7 @@ public class ComputerVsComputerGame extends Game{
     public static final int GREEN_PLAYER_TREE_DEPTH_SLIDER_Y = GREEN_PLAYER_TREE_DEPTH_TEXT_Y + 10;
     public static final int GREEN_PLAYER_USE_ALPHA_BETA_PRUNING_CHECKBOX_Y = GREEN_PLAYER_TREE_DEPTH_SLIDER_Y + 20;
 
-    public static final int MIDDLE_SEPARATOR_Y = 250;
+    public static final int MIDDLE_SEPARATOR_Y = 300;
     public static final int RED_PLAYER_LABEL_Y = MIDDLE_SEPARATOR_Y + 20;
     public static final int RED_PLAYER_TREE_DEPTH_TEXT_Y = RED_PLAYER_LABEL_Y + 40;
     public static final int RED_PLAYER_TREE_DEPTH_SLIDER_Y = RED_PLAYER_TREE_DEPTH_TEXT_Y + 10;
@@ -81,13 +81,28 @@ public class ComputerVsComputerGame extends Game{
         }
         if (isGreenPlayerTurn) {
             // Set green player parameters
-            Move greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn());
+            Move greenPlayerMove;
+
+            if (greenPlayerUseAlphaBetaPruningCheckBox.isSelected()){
+                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn(), true);
+            }
+            else {
+                greenPlayerMove = MinMaxAI.getNextMove(greenPlayerTreeDepth, this, getWhichPlayerTurn(), false);
+            }
+
             board[greenPlayerMove.getY()][greenPlayerMove.getX()].onClicked();
         }
         else {
             // Set red player parameters
-//            Move redPlayerMove = DummyAI.getNextMove(super.board);
-            Move redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn());
+            Move redPlayerMove;
+
+            if (redPlayerUseAlphaBetaPruningCheckBox.isSelected()){
+                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn(), true);
+            }
+            else {
+                redPlayerMove = MinMaxAI.getNextMove(redPlayerTreeDepth, this, getWhichPlayerTurn(), false);
+            }
+
             board[redPlayerMove.getY()][redPlayerMove.getX()].onClicked();
         }
     }
@@ -177,6 +192,28 @@ public class ComputerVsComputerGame extends Game{
         super.pane.getChildren().addAll(greenPlayerLabel, redPlayerLabel);
     }
 
+    private void initializeSeparators(){
+        topSeparator = new Separator();
+        topSeparator.setOrientation(Orientation.HORIZONTAL);
+        topSeparator.setMinWidth(300 - 20);
+        topSeparator.setTranslateX(700 + 10);
+        topSeparator.setTranslateY(TOP_SEPARATOR_Y);
+
+        middleSeparator = new Separator();
+        middleSeparator.setOrientation(Orientation.HORIZONTAL);
+        middleSeparator.setMinWidth(300 - 20);
+        middleSeparator.setTranslateX(700 + 10);
+        middleSeparator.setTranslateY(MIDDLE_SEPARATOR_Y); //250
+
+        bottomSeparator = new Separator();
+        bottomSeparator.setOrientation(Orientation.HORIZONTAL);
+        bottomSeparator.setMinWidth(300 - 20);
+        bottomSeparator.setTranslateX(700 + 10);
+        bottomSeparator.setTranslateY(BOTTOM_SEPARATOR_Y);
+
+        super.pane.getChildren().addAll(topSeparator, middleSeparator, bottomSeparator);
+    }
+
     @Override
     public void addMove(PlayerType playerType, int x, int y) {
         super.addMove(playerType, x, y);
@@ -204,28 +241,6 @@ public class ComputerVsComputerGame extends Game{
         setAllSquaresAvailability(true);
         startButton.setDisable(true);
         makeMove();
-    }
-
-    private void initializeSeparators(){
-        topSeparator = new Separator();
-        topSeparator.setOrientation(Orientation.HORIZONTAL);
-        topSeparator.setMinWidth(300 - 20);
-        topSeparator.setTranslateX(700 + 10);
-        topSeparator.setTranslateY(TOP_SEPARATOR_Y);
-
-        middleSeparator = new Separator();
-        middleSeparator.setOrientation(Orientation.HORIZONTAL);
-        middleSeparator.setMinWidth(300 - 20);
-        middleSeparator.setTranslateX(700 + 10);
-        middleSeparator.setTranslateY(MIDDLE_SEPARATOR_Y); //250
-
-        bottomSeparator = new Separator();
-        bottomSeparator.setOrientation(Orientation.HORIZONTAL);
-        bottomSeparator.setMinWidth(300 - 20);
-        bottomSeparator.setTranslateX(700 + 10);
-        bottomSeparator.setTranslateY(BOTTOM_SEPARATOR_Y);
-
-        super.pane.getChildren().addAll(topSeparator, middleSeparator, bottomSeparator);
     }
 
 }

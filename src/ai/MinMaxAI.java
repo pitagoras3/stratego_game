@@ -14,12 +14,12 @@ public class MinMaxAI implements AI{
     private static int globalTreeDepth;
     private static Move globalBestMove;
 
-    public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType){
+    public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType, boolean shouldUseAlphaBeta){
         MinMaxAI.currentGame = currentGame;
         MinMaxAI.currentPlayerType = currentPlayerType;
         MinMaxAI.oppositePlayerType = currentPlayerType == PlayerType.GREEN ? PlayerType.RED : PlayerType.GREEN;
         MinMaxAI.globalTreeDepth = treeDepth;
-        Move bestMove = getMinMaxMove(treeDepth);
+        Move bestMove = shouldUseAlphaBeta ? getAlphaBetaMove(treeDepth) : getMinMaxMove(treeDepth);
         resetMinMax();
 
         return bestMove;
@@ -27,7 +27,12 @@ public class MinMaxAI implements AI{
 
     private static Move getMinMaxMove(int treeDepth){
         ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
-//        minimax(availableMoves, treeDepth, true);
+        minimax(availableMoves, treeDepth, true);
+        return globalBestMove;
+    }
+
+    private static Move getAlphaBetaMove(int treeDepth){
+        ArrayList<Move> availableMoves = AI.getPossibleMoves(currentGame.getBoard());
         alphaBetaPruning(availableMoves, treeDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         return globalBestMove;
     }
