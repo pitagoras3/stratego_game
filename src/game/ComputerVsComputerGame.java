@@ -3,6 +3,7 @@ package game;
 import ai.MinMaxAI;
 import ai.Move;
 import ai.board_heuristic.BoardHeuristic;
+import ai.board_heuristic.BoardHeuristicStateCalculateLinesLength;
 import ai.board_heuristic.BoardHeuristicStatePointsDifference;
 import ai.node_heuristic.NodeHeuristic;
 import ai.node_heuristic.NodeHeuristicStateInOrder;
@@ -257,8 +258,8 @@ public class ComputerVsComputerGame extends Game{
         redPlayerNodeHeuristic = new NodeHeuristicStateInOrder();
 
         // Initialize board heuristics
-        greenPlayerBoardHeuristic = new BoardHeuristicStatePointsDifference();
-        redPlayerBoardHeuristic = new BoardHeuristicStatePointsDifference();
+        greenPlayerBoardHeuristic = new BoardHeuristicStateCalculateLinesLength();
+        redPlayerBoardHeuristic = new BoardHeuristicStateCalculateLinesLength();
     }
 
     @Override
