@@ -1,8 +1,8 @@
 package game;
 
-import ai.DummyAI;
 import ai.MinMaxAI;
 import ai.Move;
+import ai.board_heuristic.StatePointsDifferenceBoardHeuristic;
 import ai.node_heuristic.StateInOrderNodeHeuristic;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
@@ -52,7 +52,13 @@ public class PlayerVsComputerGame extends Game {
             return;
         }
         if (isAiTurn) {
-            Move aiMove = MinMaxAI.getNextMove(treeDepth, this, getWhichPlayerTurn(), useAlphaBetaPruningCheckBox.isSelected(), new StateInOrderNodeHeuristic());
+            Move aiMove = MinMaxAI.getNextMove(treeDepth,
+                    this,
+                    getWhichPlayerTurn(),
+                    useAlphaBetaPruningCheckBox.isSelected(),
+                    new StateInOrderNodeHeuristic(),
+                    new StatePointsDifferenceBoardHeuristic()
+            );
             board[aiMove.getY()][aiMove.getX()].onClicked();
         }
     }

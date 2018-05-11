@@ -1,5 +1,6 @@
 package ai;
 
+import ai.board_heuristic.BoardHeuristic;
 import ai.node_heuristic.NodeHeuristic;
 import game.Game;
 import game.PlayerType;
@@ -8,17 +9,20 @@ import java.util.ArrayList;
 
 public class MinMaxAI implements Heuristic {
 
+    public static PlayerType currentPlayerType;
+    public static PlayerType oppositePlayerType;
+
     private static Game currentGame;
-    private static PlayerType currentPlayerType;
-    private static PlayerType oppositePlayerType;
     private static Move localBestMove;
     private static int globalTreeDepth;
     private static Move globalBestMove;
     private static NodeHeuristic nodeHeuristic;
+    private static BoardHeuristic boardHeuristic;
 
     public static Move getNextMove(int treeDepth, Game currentGame, PlayerType currentPlayerType,
-                                   boolean shouldUseAlphaBeta, NodeHeuristic nodeHeuristic){
+                                   boolean shouldUseAlphaBeta, NodeHeuristic nodeHeuristic, BoardHeuristic boardHeuristic){
         MinMaxAI.nodeHeuristic = nodeHeuristic;
+        MinMaxAI.boardHeuristic = boardHeuristic;
         MinMaxAI.currentGame = currentGame;
         MinMaxAI.currentPlayerType = currentPlayerType;
         MinMaxAI.oppositePlayerType = currentPlayerType == PlayerType.GREEN ? PlayerType.RED : PlayerType.GREEN;
@@ -44,12 +48,7 @@ public class MinMaxAI implements Heuristic {
     private static int minimax(ArrayList<Move> availableMoves, int depth, boolean isMaximizer){
 
         if (depth == 0 || availableMoves.size() == 0){
-            if(currentPlayerType == PlayerType.GREEN){
-                return currentGame.getGreenPlayerScore() - currentGame.getRedPlayerScore();
-            }
-            else {
-                return currentGame.getRedPlayerScore() - currentGame.getGreenPlayerScore();
-            }
+            return boardHeuristic.calculateHeuristicValue(currentGame);
         }
 
         if(isMaximizer){
@@ -131,12 +130,7 @@ public class MinMaxAI implements Heuristic {
     private static int alphaBetaPruning(ArrayList<Move> availableMoves, int depth, int alpha, int beta, boolean isMaximizer){
 
         if (depth == 0 || availableMoves.size() == 0){
-            if(currentPlayerType == PlayerType.GREEN){
-                return currentGame.getGreenPlayerScore() - currentGame.getRedPlayerScore();
-            }
-            else {
-                return currentGame.getRedPlayerScore() - currentGame.getGreenPlayerScore();
-            }
+            return boardHeuristic.calculateHeuristicValue(currentGame);
         }
 
         if(isMaximizer){

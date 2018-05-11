@@ -2,6 +2,8 @@ package game;
 
 import ai.MinMaxAI;
 import ai.Move;
+import ai.board_heuristic.BoardHeuristic;
+import ai.board_heuristic.StatePointsDifferenceBoardHeuristic;
 import ai.node_heuristic.NodeHeuristic;
 import ai.node_heuristic.StateInOrderNodeHeuristic;
 import javafx.geometry.Orientation;
@@ -11,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+import java.util.logging.Logger;
 
 public class ComputerVsComputerGame extends Game{
 
@@ -63,6 +67,10 @@ public class ComputerVsComputerGame extends Game{
     private NodeHeuristic greenPlayerNodeHeuristic;
     private NodeHeuristic redPlayerNodeHeuristic;
 
+    // Board Heuristics
+    private BoardHeuristic greenPlayerBoardHeuristic;
+    private BoardHeuristic redPlayerBoardHeuristic;
+
     private boolean isGameStarted;
 
     public ComputerVsComputerGame(Parent root, int boardSize) {
@@ -95,7 +103,8 @@ public class ComputerVsComputerGame extends Game{
                         this,
                         getWhichPlayerTurn(),
                         true,
-                        greenPlayerNodeHeuristic
+                        greenPlayerNodeHeuristic,
+                        greenPlayerBoardHeuristic
                 );
             }
             else {
@@ -103,7 +112,8 @@ public class ComputerVsComputerGame extends Game{
                         this,
                         getWhichPlayerTurn(),
                         false,
-                        greenPlayerNodeHeuristic
+                        greenPlayerNodeHeuristic,
+                        greenPlayerBoardHeuristic
                 );
             }
 
@@ -118,7 +128,8 @@ public class ComputerVsComputerGame extends Game{
                         this,
                         getWhichPlayerTurn(),
                         true,
-                        redPlayerNodeHeuristic
+                        redPlayerNodeHeuristic,
+                        redPlayerBoardHeuristic
                 );
             }
             else {
@@ -126,7 +137,8 @@ public class ComputerVsComputerGame extends Game{
                         this,
                         getWhichPlayerTurn(),
                         false,
-                        redPlayerNodeHeuristic
+                        redPlayerNodeHeuristic,
+                        redPlayerBoardHeuristic
                 );
             }
 
@@ -242,8 +254,13 @@ public class ComputerVsComputerGame extends Game{
     }
 
     private void initializeHeuristics(){
+        // Initialize node heuristics
         greenPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
         redPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
+
+        // Initialize board heuristics
+        greenPlayerBoardHeuristic = new StatePointsDifferenceBoardHeuristic();
+        redPlayerBoardHeuristic = new StatePointsDifferenceBoardHeuristic();
     }
 
     @Override
