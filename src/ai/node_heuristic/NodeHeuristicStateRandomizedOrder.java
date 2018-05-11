@@ -6,11 +6,11 @@ import game.BoardSquare;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class StateRandomizedOrderNodeHeuristic implements NodeHeuristic {
+public class NodeHeuristicStateRandomizedOrder implements NodeHeuristic {
 
     @Override
     public ArrayList<Move> getAvailableMoves(BoardSquare[][] board) {
-        ArrayList<Move> availableMoves = new StateRandomizedOrderNodeHeuristic().getAvailableMoves(board);
+        ArrayList<Move> availableMoves = new NodeHeuristicStateRandomizedOrder().getAvailableMoves(board);
         Collections.shuffle(availableMoves);
         return availableMoves;
     }

@@ -4,7 +4,7 @@ import ai.MinMaxAI;
 import game.Game;
 import game.PlayerType;
 
-public class StatePointsDifferenceBoardHeuristic implements BoardHeuristic {
+public class BoardHeuristicStatePointsDifference implements BoardHeuristic {
 
     @Override
     public int calculateHeuristicValue(Game game) {

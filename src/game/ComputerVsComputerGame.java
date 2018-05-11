@@ -3,9 +3,9 @@ package game;
 import ai.MinMaxAI;
 import ai.Move;
 import ai.board_heuristic.BoardHeuristic;
-import ai.board_heuristic.StatePointsDifferenceBoardHeuristic;
+import ai.board_heuristic.BoardHeuristicStatePointsDifference;
 import ai.node_heuristic.NodeHeuristic;
-import ai.node_heuristic.StateInOrderNodeHeuristic;
+import ai.node_heuristic.NodeHeuristicStateInOrder;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -13,8 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import java.util.logging.Logger;
 
 public class ComputerVsComputerGame extends Game{
 
@@ -255,12 +253,12 @@ public class ComputerVsComputerGame extends Game{
 
     private void initializeHeuristics(){
         // Initialize node heuristics
-        greenPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
-        redPlayerNodeHeuristic = new StateInOrderNodeHeuristic();
+        greenPlayerNodeHeuristic = new NodeHeuristicStateInOrder();
+        redPlayerNodeHeuristic = new NodeHeuristicStateInOrder();
 
         // Initialize board heuristics
-        greenPlayerBoardHeuristic = new StatePointsDifferenceBoardHeuristic();
-        redPlayerBoardHeuristic = new StatePointsDifferenceBoardHeuristic();
+        greenPlayerBoardHeuristic = new BoardHeuristicStatePointsDifference();
+        redPlayerBoardHeuristic = new BoardHeuristicStatePointsDifference();
     }
 
     @Override

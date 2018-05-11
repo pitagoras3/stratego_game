@@ -2,8 +2,8 @@ package game;
 
 import ai.MinMaxAI;
 import ai.Move;
-import ai.board_heuristic.StatePointsDifferenceBoardHeuristic;
-import ai.node_heuristic.StateInOrderNodeHeuristic;
+import ai.board_heuristic.BoardHeuristicStatePointsDifference;
+import ai.node_heuristic.NodeHeuristicStateInOrder;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -56,8 +56,8 @@ public class PlayerVsComputerGame extends Game {
                     this,
                     getWhichPlayerTurn(),
                     useAlphaBetaPruningCheckBox.isSelected(),
-                    new StateInOrderNodeHeuristic(),
-                    new StatePointsDifferenceBoardHeuristic()
+                    new NodeHeuristicStateInOrder(),
+                    new BoardHeuristicStatePointsDifference()
             );
             board[aiMove.getY()][aiMove.getX()].onClicked();
         }

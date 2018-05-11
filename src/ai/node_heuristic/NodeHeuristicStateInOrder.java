@@ -6,7 +6,7 @@ import game.Game;
 
 import java.util.ArrayList;
 
-public class StateInOrderNodeHeuristic implements NodeHeuristic {
+public class NodeHeuristicStateInOrder implements NodeHeuristic {
 
     @Override
     public ArrayList<Move> getAvailableMoves(BoardSquare[][] board) {
