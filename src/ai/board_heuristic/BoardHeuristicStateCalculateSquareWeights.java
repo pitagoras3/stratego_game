@@ -6,6 +6,8 @@ import game.PlayerType;
 
 public class BoardHeuristicStateCalculateSquareWeights implements BoardHeuristic {
 
+    private int[][] squareWeights;
+
     @Override
     public int calculateHeuristicValue(Game game) {
 
