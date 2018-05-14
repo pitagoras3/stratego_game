@@ -10,7 +10,7 @@ public class NodeHeuristicStateRandomizedOrder implements NodeHeuristic {
 
     @Override
     public ArrayList<Move> getAvailableMoves(BoardSquare[][] board) {
-        ArrayList<Move> availableMoves = new NodeHeuristicStateRandomizedOrder().getAvailableMoves(board);
+        ArrayList<Move> availableMoves = new NodeHeuristicStateInOrder().getAvailableMoves(board);
         Collections.shuffle(availableMoves);
         return availableMoves;
     }

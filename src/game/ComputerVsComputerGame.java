@@ -2,11 +2,10 @@ package game;
 
 import ai.MinMaxAI;
 import ai.Move;
-import ai.board_heuristic.BoardHeuristic;
-import ai.board_heuristic.BoardHeuristicStateCalculateLinesLength;
-import ai.board_heuristic.BoardHeuristicStatePointsDifference;
+import ai.board_heuristic.*;
 import ai.node_heuristic.NodeHeuristic;
 import ai.node_heuristic.NodeHeuristicStateInOrder;
+import ai.node_heuristic.NodeHeuristicStateRandomizedOrder;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -72,6 +71,10 @@ public class ComputerVsComputerGame extends Game{
 
     private boolean isGameStarted;
 
+    private long startPeriodTime;
+    private long greenPlayerTime;
+    private long redPlayerTime;
+
     public ComputerVsComputerGame(Parent root, int boardSize) {
         super(root, boardSize);
         this.greenPlayerTreeDepth = DEFAULT_TREE_DEPTH;
@@ -91,6 +94,9 @@ public class ComputerVsComputerGame extends Game{
     @Override
     void makeMove() {
         if(!isGameStarted){
+            System.out.println("GREEN: " + greenPlayerTime);
+            System.out.println("RED: " + redPlayerTime);
+
             return;
         }
         if (isGreenPlayerTurn) {
@@ -115,6 +121,10 @@ public class ComputerVsComputerGame extends Game{
                         greenPlayerBoardHeuristic
                 );
             }
+            greenPlayerTime += (System.currentTimeMillis() - startPeriodTime);
+
+            System.out.println("GREEN: " + greenPlayerTime);
+            startPeriodTime = System.currentTimeMillis();
 
             board[greenPlayerMove.getY()][greenPlayerMove.getX()].onClicked();
         }
@@ -140,6 +150,11 @@ public class ComputerVsComputerGame extends Game{
                         redPlayerBoardHeuristic
                 );
             }
+
+            redPlayerTime += (System.currentTimeMillis() - startPeriodTime);
+
+            System.out.println("RED: " + redPlayerTime);
+            startPeriodTime = System.currentTimeMillis();
 
             board[redPlayerMove.getY()][redPlayerMove.getX()].onClicked();
         }
@@ -254,12 +269,12 @@ public class ComputerVsComputerGame extends Game{
 
     private void initializeHeuristics(){
         // Initialize node heuristics
-        greenPlayerNodeHeuristic = new NodeHeuristicStateInOrder();
-        redPlayerNodeHeuristic = new NodeHeuristicStateInOrder();
+        greenPlayerNodeHeuristic    = new NodeHeuristicStateRandomizedOrder();
+        redPlayerNodeHeuristic      = new NodeHeuristicStateRandomizedOrder();
 
         // Initialize board heuristics
-        greenPlayerBoardHeuristic = new BoardHeuristicStateCalculateLinesLength();
-        redPlayerBoardHeuristic = new BoardHeuristicStateCalculateLinesLength();
+        greenPlayerBoardHeuristic   = new BoardHeuristicStatePointsDifference();
+        redPlayerBoardHeuristic     = new BoardHeuristicStatePointsDifference();
     }
 
     @Override
@@ -288,6 +303,12 @@ public class ComputerVsComputerGame extends Game{
         isGameStarted = true;
         setAllSquaresAvailability(true);
         startButton.setDisable(true);
+        SquareWeightsSingleton.resetInstance();
+
+        this.startPeriodTime = System.currentTimeMillis();
+        this.greenPlayerTime = 0;
+        this.redPlayerTime = 0;
+
         makeMove();
     }
 

@@ -22,6 +22,10 @@ public class SquareWeightsSingleton {
         return instance;
     }
 
+    public static void resetInstance(){
+        instance = null;
+    }
+
     private void fillSquareWeights(){
         for (int x = 0; x < Game.BOARD_SIZE; x++){
             for (int y = 0; y < Game.BOARD_SIZE; y++){
